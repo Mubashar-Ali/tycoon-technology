@@ -30,7 +30,7 @@ const ServicesSection = () => {
     },
     {
       icon: "🎬",
-      title: "Video Editing",
+      title: "Film Making",
       description:
         "We transform raw footage into compelling visual content with clean cuts, graphics, and effects—ideal for promotions, social media, and branding.",
       features: ["Professional Editing", "Motion Graphics", "Color Grading", "Multi-Format Export"],
@@ -126,16 +126,16 @@ const ServicesSection = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <motion.p className="text-primary font-medium text-sm uppercase tracking-wider mb-4" variants={itemVariants}>
-            OUR SERVICES
-          </motion.p>
-          <motion.h2 className="text-3xl md:text-5xl font-bold mb-6 text-balance" variants={itemVariants}>
-            Smart Solutions for <span className="gradient-text">Your Business</span>
+          <motion.div className="flex items-center justify-center gap-2 mb-4" variants={itemVariants}>
+            <div className="h-1 w-10 bg-primary rounded-full"></div>
+            <motion.p className="text-primary font-medium text-sm uppercase tracking-wider" variants={itemVariants}>
+              SERVICES
+            </motion.p>
+            <div className="h-1 w-10 bg-primary rounded-full"></div>
+          </motion.div>
+          <motion.h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance" variants={itemVariants}>
+            <span className="gradient-text">Solutions</span> We Deliver
           </motion.h2>
-          <motion.p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty" variants={itemVariants}>
-            Empowering your growth with innovative digital solutions, tailored to meet your business needs and drive
-            success in the digital landscape.
-          </motion.p>
         </motion.div>
 
         {/* Services Grid */}
@@ -168,7 +168,7 @@ const ServicesSection = () => {
                   whileHover={{ rotate: 5, scale: 1.1 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <span className="text-2xl">{service.icon}</span>
+                  <span className="text-3xl">{service.icon}</span>
                 </motion.div>
 
                 {/* Service Content */}
@@ -180,11 +180,11 @@ const ServicesSection = () => {
                   >
                     {service.title}
                   </motion.h3>
-                  <p className="text-muted-foreground leading-relaxed text-pretty">{service.description}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">{service.description}</p>
 
                   {/* Features */}
                   <motion.div
-                    className="space-y-2"
+                    className="space-y-2 pt-2"
                     initial="hidden"
                     whileInView="visible"
                     variants={{

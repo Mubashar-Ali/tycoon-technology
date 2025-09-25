@@ -159,16 +159,16 @@ const TestimonialsSection = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <motion.p className="text-primary font-medium text-sm uppercase tracking-wider mb-4" variants={itemVariants}>
-            TESTIMONIALS
-          </motion.p>
-          <motion.h2 className="text-3xl md:text-5xl font-bold mb-6 text-balance" variants={itemVariants}>
-            What they say
+          <motion.div className="flex items-center justify-center gap-2 mb-4" variants={itemVariants}>
+            <div className="h-1 w-10 bg-primary rounded-full"></div>
+            <motion.p className="text-primary font-medium text-sm uppercase tracking-wider" variants={itemVariants}>
+              CLIENT STORIES
+            </motion.p>
+            <div className="h-1 w-10 bg-primary rounded-full"></div>
+          </motion.div>
+          <motion.h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance" variants={itemVariants}>
+            <span className="gradient-text">Success</span> Stories
           </motion.h2>
-          <motion.p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty" variants={itemVariants}>
-            Don't just take our word for it. Here's what our clients have to say about working with Tycoon Technology
-            and the results we've delivered together.
-          </motion.p>
         </motion.div>
 
         {/* Main Testimonial Display */}
@@ -180,10 +180,14 @@ const TestimonialsSection = () => {
           transition={{ duration: 0.6 }}
         >
           <motion.div
-            className="bg-card/30 backdrop-blur-sm border border-border/50 rounded-3xl p-8 md:p-12 relative"
+            className="bg-card/30 backdrop-blur-sm border border-border/50 rounded-3xl p-8 md:p-12 relative overflow-hidden"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-full blur-lg translate-y-1/3 -translate-x-1/3"></div>
+            
             {/* Quote Icon */}
             <motion.div
               className="absolute top-6 left-6 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center"

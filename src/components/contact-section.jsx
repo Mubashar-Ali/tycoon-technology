@@ -103,19 +103,15 @@ const ContactSection = () => {
             viewport={{ once: true, margin: "-100px" }}
           >
             <motion.div variants={itemVariants}>
-              <motion.p
-                className="text-primary font-medium text-sm uppercase tracking-wider mb-4"
-                variants={itemVariants}
-              >
-                GET IN TOUCH
-              </motion.p>
-              <motion.h2 className="text-3xl md:text-5xl font-bold mb-6 text-balance" variants={itemVariants}>
-                Ready to transform your <span className="gradient-text">digital presence</span>?
+              <motion.div className="flex items-center gap-2 mb-4" variants={itemVariants}>
+                <div className="h-1 w-10 bg-primary rounded-full"></div>
+                <motion.p className="text-primary font-medium text-sm uppercase tracking-wider" variants={itemVariants}>
+                  CONTACT US
+                </motion.p>
+              </motion.div>
+              <motion.h2 className="text-4xl md:text-6xl font-bold mb-6 text-balance" variants={itemVariants}>
+                Let's <span className="gradient-text">Connect</span>
               </motion.h2>
-              <motion.p className="text-xl text-muted-foreground leading-relaxed text-pretty" variants={itemVariants}>
-                Let's discuss your project and explore how our innovative solutions can help your business grow and
-                succeed in the digital landscape.
-              </motion.p>
             </motion.div>
 
             {/* Contact Details */}
@@ -135,9 +131,6 @@ const ContactSection = () => {
                     <>
                       Missri Plaza, Crown Center
                       <br />
-                      Basement, Office No 1, Dubai Chowk
-                      <br />
-                      Faiz Colony Model Town A<br />
                       Bahawalpur, Punjab, Pakistan
                     </>
                   ),
@@ -155,8 +148,6 @@ const ContactSection = () => {
                   content: (
                     <>
                       info@tycoontechnology.com
-                      <br />
-                      support@tycoontechnology.com
                     </>
                   ),
                 },
@@ -173,17 +164,15 @@ const ContactSection = () => {
                   content: (
                     <>
                       +92 300 1234567
-                      <br />
-                      +92 333 9876543
                     </>
                   ),
                 },
               ].map((item, index) => (
                 <motion.div
                   key={index}
-                  className="flex items-start space-x-4"
+                  className="flex items-start space-x-4 p-4 rounded-xl bg-card/30 backdrop-blur-sm border border-border/30"
                   variants={itemVariants}
-                  whileHover={{ x: 5 }}
+                  whileHover={{ x: 5, backgroundColor: "rgba(var(--card), 0.5)" }}
                   transition={{ duration: 0.2 }}
                 >
                   <motion.div

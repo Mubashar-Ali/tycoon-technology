@@ -215,48 +215,6 @@ const SocialProofSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <div className="max-w-3xl mx-auto space-y-6">
-            <motion.h3
-              className="text-2xl md:text-3xl font-bold text-balance"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              Ready to join our <span className="gradient-text">success stories</span>?
-            </motion.h3>
-            <motion.p
-              className="text-lg text-muted-foreground text-pretty"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              Let's discuss how we can help transform your business with our proven digital solutions and expertise.
-            </motion.p>
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-            >
-              <motion.button
-                className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-medium hover:bg-primary/90 transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Start Your Project
-              </motion.button>
-              <motion.button
-                className="border border-border text-foreground px-8 py-4 rounded-lg font-medium hover:bg-accent transition-all duration-200"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Schedule Consultation
-              </motion.button>
-            </motion.div>
-          </div>
         </motion.div>
       </div>
     </section>

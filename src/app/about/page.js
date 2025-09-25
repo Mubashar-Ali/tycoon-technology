@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Navigation from "@/components/navigation"
-import Footer from "@/components/footer"
+import { motion } from "framer-motion";
+import Navigation from "@/components/navigation";
+import Footer from "@/components/footer";
 
 export default function AboutPage() {
   return (
@@ -38,13 +38,17 @@ export default function AboutPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <p className="text-primary font-semibold mb-4 tracking-wide">WHO WE ARE</p>
+              <p className="text-primary font-semibold mb-4 tracking-wide">
+                WHO WE ARE
+              </p>
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 text-balance">
                 {"It's more than a name. It's a promise."}
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                We are Tycoon Technology — building digital futures with creativity, code, and content. From development
-                to digital marketing, we bring your ideas to life with precision and passion.
+                We are Tycoon Technology — building digital futures with
+                creativity, code, and content. From development to digital
+                marketing, we bring your ideas to life with precision and
+                passion.
               </p>
             </motion.div>
 
@@ -104,8 +108,12 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 className="bg-card p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-border"
               >
-                <h3 className="text-2xl font-bold text-card-foreground mb-4">{service.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+                <h3 className="text-2xl font-bold text-card-foreground mb-4">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -126,16 +134,33 @@ export default function AboutPage() {
               Teamwork makes the dream work.
             </h2>
             <p className="text-xl text-muted-foreground">
-              We are the best we are the dreamers and we will work to make it Happen
+              We are the best we are the dreamers and we will work to make it
+              Happen
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { name: "Kashif Ajmal Malik", role: "Founder" },
-              { name: "Jahanzaib", role: "PhotoGrapher" },
-              { name: "Tayab Zafar", role: "Graphic Designer" },
-              { name: "Kalsoom Bibi", role: "Social Media Marketing" },
+              {
+                name: "Kashif Ajmal Malik",
+                role: "Founder",
+                image: "/kashif.jpeg",
+              },
+              {
+                name: "Jahanzaib",
+                role: "PhotoGrapher",
+                image: "/jahnzaib.jpeg",
+              },
+              {
+                name: "Mubashar Ali",
+                role: "Sr Full Stack Developer",
+                image: "/mubashar.jpeg",
+              },
+              {
+                name: "Aman Ullah",
+                role: "Sr Flutter Developer",
+                image: "/aman.jpg",
+              },
             ].map((member, index) => (
               <motion.div
                 key={index}
@@ -143,19 +168,21 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-card p-6 rounded-2xl hover:shadow-lg transition-shadow duration-300 border border-border"
+                className="bg-card p-6 rounded-2xl hover:shadow-lg transition-shadow duration-300 border border-border text-center"
               >
-                <div className="flex justify-center space-x-2 mb-4">
-                  <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold">f</span>
-                  </div>
-                  <div className="w-10 h-10 bg-primary/80 rounded-full flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold">in</span>
-                  </div>
-                  <div className="w-10 h-10 bg-primary/60 rounded-full"></div>
+                <div className="flex justify-center mb-4">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-50 h-50 rounded-full object-cover border-4 border-primary shadow-md"
+                  />
                 </div>
-                <h3 className="text-xl font-bold text-card-foreground mb-2">{member.name}</h3>
-                <p className="text-muted-foreground">{member.role}</p>
+                <h3 className="text-lg md:text-xl font-bold text-card-foreground mb-1">
+                  {member.name}
+                </h3>
+                <p className="text-sm md:text-base text-muted-foreground">
+                  {member.role}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -164,5 +191,5 @@ export default function AboutPage() {
 
       <Footer />
     </div>
-  )
+  );
 }

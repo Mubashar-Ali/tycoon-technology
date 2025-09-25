@@ -184,41 +184,6 @@ const Footer = () => {
               </motion.div>
             ))}
 
-            {/* Newsletter */}
-            <motion.div variants={itemVariants}>
-              <motion.h3
-                className="font-semibold text-foreground mb-4"
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                Newsletter
-              </motion.h3>
-              <motion.p className="text-muted-foreground mb-4 text-sm" variants={itemVariants}>
-                Get exclusive deals by signing up to our Newsletter.
-              </motion.p>
-              <motion.form onSubmit={handleNewsletterSubmit} className="space-y-3" variants={containerVariants}>
-                <motion.input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 text-foreground placeholder-muted-foreground text-sm"
-                  required
-                  variants={itemVariants}
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                />
-                <motion.button
-                  type="submit"
-                  className="w-full bg-primary text-primary-foreground px-4 py-3 rounded-lg font-medium hover:bg-primary/90 transition-all duration-200 text-sm"
-                  variants={itemVariants}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Sign Up
-                </motion.button>
-              </motion.form>
-            </motion.div>
           </div>
         </motion.div>
 

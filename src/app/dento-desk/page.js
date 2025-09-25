@@ -172,13 +172,6 @@ const DentoDeskPage = () => {
                 >
                   Start Free Trial
                 </motion.button>
-                <motion.button
-                  className="border border-border text-foreground px-8 py-4 rounded-lg font-semibold hover:bg-muted transition-colors duration-200"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Schedule Demo
-                </motion.button>
               </motion.div>
             </motion.div>
 

@@ -64,14 +64,13 @@ const HeroSection = () => {
   }
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+      {/* Background Pattern - Modern gradient effect */}
+      <div className="absolute inset-0">
         <motion.div
-          className="absolute top-20 left-20 w-72 h-72 bg-primary/20 rounded-full blur-3xl"
+          className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-60"
           animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.1, 0.2, 0.1],
+            opacity: [0.4, 0.6, 0.4],
           }}
           transition={{
             duration: 8,
@@ -80,10 +79,9 @@ const HeroSection = () => {
           }}
         ></motion.div>
         <motion.div
-          className="absolute bottom-20 right-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+          className="absolute bottom-0 right-0 w-2/3 h-1/2 bg-gradient-to-tl from-primary/5 via-accent/10 to-transparent opacity-50"
           animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.05, 0.15, 0.05],
+            opacity: [0.3, 0.5, 0.3],
           }}
           transition={{
             duration: 10,
@@ -92,56 +90,42 @@ const HeroSection = () => {
             delay: 2,
           }}
         ></motion.div>
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.015]"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <motion.div className="space-y-8" variants={containerVariants} initial="hidden" animate="visible">
             <motion.div className="space-y-4" variants={itemVariants}>
-              <motion.p className="text-primary font-medium text-sm uppercase tracking-wider" variants={itemVariants}>
-                INNOVATIVE DIGITAL SOLUTIONS
-              </motion.p>
-              <motion.h1 className="text-4xl md:text-6xl font-bold leading-tight text-balance" variants={itemVariants}>
-                Where deep tech meets <span className="gradient-text">human innovation</span>
+              <motion.div className="flex items-center gap-2" variants={itemVariants}>
+                <div className="h-1 w-10 bg-primary rounded-full"></div>
+                <motion.p className="text-primary font-medium text-sm uppercase tracking-wider" variants={itemVariants}>
+                  TECH INNOVATION
+                </motion.p>
+              </motion.div>
+              <motion.h1 className="text-5xl md:text-7xl font-bold leading-tight text-balance" variants={itemVariants}>
+                <span className="gradient-text">Digital Solutions</span> for Growth
               </motion.h1>
-              <motion.p className="text-xl text-muted-foreground leading-relaxed text-pretty" variants={itemVariants}>
-                Tycoon Technology transforms businesses with cutting-edge digital solutions. Our expert team delivers
-                seamless technology integration, helping you grow smarter and faster in the digital landscape.
+              <motion.p className="text-lg text-muted-foreground max-w-lg" variants={itemVariants}>
+                Transforming businesses with cutting-edge technology integration.
               </motion.p>
-            </motion.div>
-
-            <motion.div className="flex flex-col sm:flex-row gap-4" variants={itemVariants}>
-              <motion.button
-                className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-medium hover:bg-primary/90 transition-all duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Discover Our Services
-              </motion.button>
-              <motion.button
-                className="border border-border text-foreground px-8 py-4 rounded-lg font-medium hover:bg-accent transition-all duration-200"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                View Our Work
-              </motion.button>
             </motion.div>
 
             {/* Stats */}
             <motion.div
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-8"
+              className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8"
               variants={statsVariants}
               initial="hidden"
               animate="visible"
             >
               {[
-                { value: "2k+", label: "Active Members" },
-                { value: "98%", label: "Satisfied Customers" },
-                { value: "4.7", label: "User Rating" },
-                { value: "5+", label: "Years Experience" },
+                { value: "2k+", label: "Clients" },
+                { value: "98%", label: "Satisfaction" },
+                { value: "4.7", label: "Rating" },
+                { value: "5+", label: "Years" },
               ].map((stat, index) => (
-                <motion.div key={index} className="text-center" variants={itemVariants}>
+                <motion.div key={index} className="text-center p-3 rounded-xl bg-background/50 backdrop-blur-sm border border-border/30" variants={itemVariants}>
                   <motion.div
                     className="text-3xl font-bold text-primary"
                     initial={{ scale: 0 }}
@@ -158,13 +142,13 @@ const HeroSection = () => {
 
           {/* Image/Visual */}
           <motion.div className="relative" variants={imageVariants} initial="hidden" animate="visible">
-            <motion.div className="relative z-10" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
+            <motion.div className="relative z-10 overflow-hidden rounded-2xl shadow-2xl" whileHover={{ scale: 1.02 }} transition={{ duration: 0.3 }}>
               <img
-                // src="/professional-tech-team-working-on-innovative-digit.jpg"
-                src="https://media.istockphoto.com/id/1985871636/photo/artificial-intelligence-domination-light-bulb-brain-idea-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=nfBFeHfr0JMGiRB75K6K7lLBrkyoWfn5vQ6uagl_9ZU="
-                alt="Tycoon Technology Team"
-                className="w-full h-auto rounded-2xl shadow-2xl"
+                src="https://images.pexels.com/photos/577514/pexels-photo-577514.jpeg"
+                alt="Tycoon Technology"
+                className="w-full h-auto rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-700"
               />
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-transparent opacity-60 mix-blend-overlay"></div>
             </motion.div>
             <motion.div
               className="absolute -top-4 -right-4 w-full h-full bg-primary/20 rounded-2xl -z-10"
