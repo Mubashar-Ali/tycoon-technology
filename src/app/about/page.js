@@ -1,10 +1,47 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 
 export default function AboutPage() {
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch team members from Firebase Firestore
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        setLoading(true);
+        const teamMembersQuery = query(
+          collection(db, "teamMembers"),
+          orderBy("order", "asc")
+        );
+        
+        const querySnapshot = await getDocs(teamMembersQuery);
+        
+        const teamMembersData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        
+        setTeamMembers(teamMembersData);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching team members:", err);
+        setError("Failed to load team members. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -139,53 +176,64 @@ export default function AboutPage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                name: "Kashif Ajmal Malik",
-                role: "Founder",
-                image: "/kashif.jpeg",
-              },
-              {
-                name: "Jahanzaib",
-                role: "PhotoGrapher",
-                image: "/jahnzaib.jpeg",
-              },
-              {
-                name: "Mubashar Ali",
-                role: "Sr Full Stack Developer",
-                image: "/mubashar.jpeg",
-              },
-              {
-                name: "Aman Ullah",
-                role: "Sr Flutter Developer",
-                image: "/aman.jpg",
-              },
-            ].map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-card p-6 rounded-2xl hover:shadow-lg transition-shadow duration-300 border border-border text-center"
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Loading team members...</p>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-12">
+              <p className="text-red-500">{error}</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="mt-4 bg-primary text-white px-4 py-2 rounded"
               >
-                <div className="flex justify-center mb-4">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-50 h-50 rounded-full object-cover border-4 border-primary shadow-md"
-                  />
+                Retry
+              </button>
+            </div>
+          )}
+
+          {/* Team Members Grid */}
+          {!loading && !error && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {teamMembers.length > 0 ? (
+                teamMembers.map((member, index) => (
+                  <motion.div
+                    key={member.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="bg-card p-6 rounded-2xl hover:shadow-lg transition-shadow duration-300 border border-border text-center"
+                  >
+                    <div className="flex justify-center mb-4">
+                      <img
+                        src={member.image || "/placeholder.svg"}
+                        alt={member.name}
+                        className="w-32 h-32 rounded-full object-cover border-4 border-primary shadow-md"
+                        onError={(e) => {
+                          e.target.src = "/placeholder.svg";
+                        }}
+                      />
+                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-card-foreground mb-1">
+                      {member.name}
+                    </h3>
+                    <p className="text-sm md:text-base text-muted-foreground">
+                      {member.title || member.role}
+                    </p>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-muted-foreground">No team members available yet.</p>
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-card-foreground mb-1">
-                  {member.name}
-                </h3>
-                <p className="text-sm md:text-base text-muted-foreground">
-                  {member.role}
-                </p>
-              </motion.div>
-            ))}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 

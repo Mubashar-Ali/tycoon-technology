@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Navigation from "@/components/navigation";
@@ -10,24 +9,56 @@ import Footer from "@/components/footer";
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
-    company: "",
-    phone: "",
     email: "",
-    subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
-  };
-
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [id]: value,
     }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: "success",
+          message: "Message sent successfully!",
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: data.error || "Failed to send message",
+        });
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: "Network error. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -76,10 +107,6 @@ export default function ContactPage() {
                 <h2 className="text-3xl font-bold text-foreground mb-8">
                   Get in touch
                 </h2>
-                <p className="text-muted-foreground mb-12 leading-relaxed">
-                  Empowering businesses with innovative solutions. Let's connect
-                  and shape the future of technology together.
-                </p>
 
                 <div className="space-y-8">
                   <div className="flex items-start space-x-4">
@@ -169,32 +196,6 @@ export default function ContactPage() {
                     </div>
                   </div>
                 </div>
-
-                <div className="mt-12">
-                  <h3 className="text-xl font-bold text-foreground mb-4">
-                    Follow our social media
-                  </h3>
-                  <div className="flex space-x-3">
-                    <a
-                      href="#"
-                      className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-primary-foreground hover:bg-primary/80 transition-colors"
-                    >
-                      <span className="font-bold">f</span>
-                    </a>
-                    <a
-                      href="#"
-                      className="w-12 h-12 bg-primary/80 rounded-full flex items-center justify-center text-primary-foreground hover:bg-primary/60 transition-colors"
-                    >
-                      <span className="font-bold">in</span>
-                    </a>
-                    <a
-                      href="#"
-                      className="w-12 h-12 bg-primary/60 rounded-full flex items-center justify-center text-primary-foreground hover:bg-primary/40 transition-colors"
-                    >
-                      <span className="font-bold">ig</span>
-                    </a>
-                  </div>
-                </div>
               </motion.div>
 
               {/* Contact Form */}
@@ -210,78 +211,33 @@ export default function ContactPage() {
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Name"
-                        className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors text-foreground"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Company
-                      </label>
-                      <input
-                        type="text"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleChange}
-                        placeholder="Company"
-                        className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors text-foreground"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Phone
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="Phone"
-                        className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors text-foreground"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Email"
-                        className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors text-foreground"
-                        required
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Name
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      placeholder="Your name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors text-foreground"
+                    />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Subject
+                      Email
                     </label>
                     <input
-                      type="text"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      placeholder="Subject"
-                      className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors text-foreground"
+                      id="email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       required
+                      className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors text-foreground"
                     />
                   </div>
 
@@ -290,23 +246,24 @@ export default function ContactPage() {
                       Message
                     </label>
                     <textarea
-                      name="message"
+                      id="message"
+                      placeholder="Tell us about your business needs..."
+                      rows={5}
                       value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Message"
-                      rows={6}
-                      className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors resize-none text-foreground"
+                      onChange={handleInputChange}
                       required
+                      className="w-full px-4 py-3 bg-input border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent transition-colors resize-none text-foreground"
                     />
                   </div>
 
                   <motion.button
                     type="submit"
+                    disabled={isSubmitting}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full bg-primary text-primary-foreground py-4 px-8 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-300"
                   >
-                    Send
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
                   </motion.button>
                 </form>
               </motion.div>

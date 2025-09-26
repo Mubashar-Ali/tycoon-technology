@@ -1,55 +1,44 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
+import { collection, getDocs, orderBy, query } from "firebase/firestore"
+import { db } from "@/lib/firebase"
 
 const ServicesSection = () => {
   const [hoveredService, setHoveredService] = useState(null)
+  const [services, setServices] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const services = [
-    {
-      icon: "🌐",
-      title: "Web Development",
-      description:
-        "We create stunning, high-performance websites tailored to your business goals. Whether you're a startup or an established brand, our web development team ensures your site is fast, responsive, secure, and SEO-friendly.",
-      features: ["Responsive Design", "SEO Optimization", "Performance Focused", "Modern Frameworks"],
-    },
-    {
-      icon: "📱",
-      title: "App Development",
-      description:
-        "Our team develops intuitive, scalable mobile and web apps for Android, iOS, and cross-platform environments, focused on functionality and user engagement.",
-      features: ["Cross-Platform", "Native Performance", "User-Centric Design", "Scalable Architecture"],
-    },
-    {
-      icon: "📢",
-      title: "Social Media Marketing",
-      description:
-        "We grow your brand online through strategic content, targeted ads, and performance-driven campaigns across all major social platforms.",
-      features: ["Content Strategy", "Targeted Advertising", "Analytics & Insights", "Brand Growth"],
-    },
-    {
-      icon: "🎬",
-      title: "Film Making",
-      description:
-        "We transform raw footage into compelling visual content with clean cuts, graphics, and effects—ideal for promotions, social media, and branding.",
-      features: ["Professional Editing", "Motion Graphics", "Color Grading", "Multi-Format Export"],
-    },
-    {
-      icon: "🎥",
-      title: "Production House",
-      description:
-        "From scripting to shooting and editing, we manage full-scale video production to deliver high-quality, creative content for your business or events.",
-      features: ["Full Production", "Creative Direction", "Professional Equipment", "Post-Production"],
-    },
-    {
-      icon: "💡",
-      title: "Digital Consultancy",
-      description:
-        "We provide expert digital strategies, IT solutions, and tech-driven insights to streamline your operations and boost business growth.",
-      features: ["Strategic Planning", "Technology Integration", "Process Optimization", "Growth Analytics"],
-    },
-  ]
+  // Fetch services from Firebase Firestore
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoading(true)
+        const servicesQuery = query(
+          collection(db, "services"),
+          orderBy("order", "asc")
+        )
+        const querySnapshot = await getDocs(servicesQuery)
+
+        const servicesData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+
+        setServices(servicesData)
+        setError(null)
+      } catch (err) {
+        console.error("Error fetching services:", err)
+        setError("Failed to load services. Please try again later.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchServices()
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -84,6 +73,32 @@ const ServicesSection = () => {
         ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
+  }
+
+  // Loading state
+  if (loading) {
+    return (
+      <section id="services" className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center">
+            <p className="text-muted-foreground">Loading services...</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <section id="services" className="py-20 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center">
+            <p className="text-red-500">{error}</p>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   return (
@@ -139,100 +154,127 @@ const ServicesSection = () => {
         </motion.div>
 
         {/* Services Grid */}
-        <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              className="group relative"
-              variants={cardVariants}
-              onMouseEnter={() => setHoveredService(index)}
-              onMouseLeave={() => setHoveredService(null)}
-              whileHover={{ y: -8 }}
-              transition={{ duration: 0.3 }}
-            >
+        {services.length > 0 ? (
+          <motion.div
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+          >
+            {services.map((service, index) => (
               <motion.div
-                className={`h-full p-8 rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-all duration-300 ${hoveredService === index ? "shadow-2xl border-primary/50" : "hover:border-border/80"
-                  }`}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
+                key={service.id}
+                className="group relative"
+                variants={cardVariants}
+                onMouseEnter={() => setHoveredService(index)}
+                onMouseLeave={() => setHoveredService(null)}
+                whileHover={{ y: -8 }}
+                transition={{ duration: 0.3 }}
               >
-                {/* Service Icon */}
                 <motion.div
-                  className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300"
-                  whileHover={{ rotate: 5, scale: 1.1 }}
+                  className={`h-full p-8 rounded-2xl border border-border bg-card/50 backdrop-blur-sm transition-all duration-300 ${hoveredService === index ? "shadow-2xl border-primary/50" : "hover:border-border/80"
+                    }`}
+                  whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <span className="text-3xl">{service.icon}</span>
-                </motion.div>
-
-                {/* Service Content */}
-                <div className="space-y-4">
-                  <motion.h3
-                    className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300"
-                    whileHover={{ x: 5 }}
+                  {/* Service Icon */}
+                  <motion.div
+                    className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors duration-300"
+                    whileHover={{ rotate: 5, scale: 1.1 }}
                     transition={{ duration: 0.2 }}
                   >
-                    {service.title}
-                  </motion.h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">{service.description}</p>
-
-                  {/* Features */}
-                  <motion.div
-                    className="space-y-2 pt-2"
-                    initial="hidden"
-                    whileInView="visible"
-                    variants={{
-                      visible: {
-                        transition: {
-                          staggerChildren: 0.05,
-                        },
-                      },
-                    }}
-                  >
-                    {service.features.map((feature, featureIndex) => (
-                      <motion.div
-                        key={featureIndex}
-                        className="flex items-center space-x-2"
-                        variants={{
-                          hidden: { opacity: 0, x: -10 },
-                          visible: { opacity: 1, x: 0 },
-                        }}
-                      >
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                        <span className="text-sm text-muted-foreground">{feature}</span>
-                      </motion.div>
-                    ))}
+                    {service.icon ? (
+                      service.icon.startsWith("http") ? (
+                        <img
+                          src={service.icon || placeholder.jpg}
+                          alt={service.title}
+                          className="w-8 h-8 object-contain"
+                          onError={(e) => {
+                            // Fallback to emoji if image fails to load
+                            e.target.style.display = 'none'
+                            e.target.nextSibling.style.display = 'block'
+                          }}
+                        />
+                      ) : (
+                        <span className="text-3xl">{service.icon}</span>
+                      )
+                    ) : (
+                      <span className="text-3xl">💼</span> // Default icon
+                    )}
                   </motion.div>
 
-                  {/* CTA Button */}
-                  <motion.button
-                    className="mt-6 text-primary font-medium text-sm hover:text-primary/80 transition-colors duration-200 flex items-center space-x-2 group/btn"
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <span>Learn more</span>
-                    <motion.svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      whileHover={{ x: 3 }}
+                  {/* Service Content */}
+                  <div className="space-y-4">
+                    <motion.h3
+                      className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300"
+                      whileHover={{ x: 5 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </motion.svg>
-                  </motion.button>
-                </div>
+                      {service.title}
+                    </motion.h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
+                      {service.description}
+                    </p>
+
+                    {/* Features - Only show if features array exists */}
+                    {service.features && service.features.length > 0 && (
+                      <motion.div
+                        className="space-y-2 pt-2"
+                        initial="hidden"
+                        whileInView="visible"
+                        variants={{
+                          visible: {
+                            transition: {
+                              staggerChildren: 0.05,
+                            },
+                          },
+                        }}
+                      >
+                        {service.features.map((feature, featureIndex) => (
+                          <motion.div
+                            key={featureIndex}
+                            className="flex items-center space-x-2"
+                            variants={{
+                              hidden: { opacity: 0, x: -10 },
+                              visible: { opacity: 1, x: 0 },
+                            }}
+                          >
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                            <span className="text-sm text-muted-foreground">{feature}</span>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    )}
+
+                    {/* CTA Button */}
+                    <motion.button
+                      className="mt-6 text-primary font-medium text-sm hover:text-primary/80 transition-colors duration-200 flex items-center space-x-2 group/btn"
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <span>Learn more</span>
+                      <motion.svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        whileHover={{ x: 3 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </motion.svg>
+                    </motion.button>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No services available at the moment.</p>
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <motion.div

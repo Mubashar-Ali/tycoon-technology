@@ -2,81 +2,134 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { collection, query, orderBy, onSnapshot, Timestamp } from "firebase/firestore"
+import { db } from "@/lib/firebase" 
 
 const TestimonialsSection = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const [testimonials, setTestimonials] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
+  // Fetch testimonials from Firebase Firestore with real-time listener
   useEffect(() => {
-    setMounted(true)
+    console.log("Setting up Firestore listener...")
+    
+    try {
+      // Create query - handle potential timestamp issues
+      let testimonialsQuery
+      try {
+        testimonialsQuery = query(
+          collection(db, "testimonials"),
+          orderBy("createdAt", "desc")
+        )
+      } catch (queryError) {
+        console.warn("Timestamp ordering failed, using default order:", queryError)
+        // Fallback without ordering if timestamp field causes issues
+        testimonialsQuery = query(collection(db, "testimonials"))
+      }
+
+      const unsubscribe = onSnapshot(
+        testimonialsQuery,
+        (querySnapshot) => {
+          console.log("Received snapshot with", querySnapshot.size, "documents")
+          
+          const testimonialsData = querySnapshot.docs.map(doc => {
+            const data = doc.data()
+            console.log("Document data:", data)
+            return {
+              id: doc.id,
+              ...data
+            }
+          })
+          
+          setTestimonials(testimonialsData)
+          setError(null)
+          setLoading(false)
+          setMounted(true)
+        },
+        (err) => {
+          console.error("Error in real-time testimonials listener:", err)
+          setError("Failed to load testimonials. Please check your Firebase configuration.")
+          setLoading(false)
+          setMounted(true)
+        }
+      )
+
+      // Cleanup subscription on unmount
+      return () => {
+        console.log("Cleaning up Firestore listener")
+        unsubscribe()
+      }
+    } catch (err) {
+      console.error("Error setting up Firestore listener:", err)
+      setError("Failed to connect to database. Please try again later.")
+      setLoading(false)
+      setMounted(true)
+    }
   }, [])
 
-  const testimonials = [
-    {
-      name: "Pizza Town",
-      role: "Business Manager",
-      company: "Pizza Town Restaurant",
-      image: "/pizza-restaurant-logo.png",
-      testimonial:
-        "Working with Tycoon Technology has taken our visual branding to the next level. From vibrant food photography to mouthwatering video ads, they've helped us attract more foot traffic and increase online orders. Their creativity and commitment are unmatched!",
-      rating: 5,
-    },
-    {
-      name: "Lasani BBQ",
-      role: "CEO",
-      company: "Lasani BBQ Restaurant",
-      image: "/bbq-restaurant-logo.jpg",
-      testimonial:
-        "Tycoon Technology truly understands the flavor of our brand. Their marketing videos capture the heart of our BBQ experience and make our dishes irresistible even on screen. We've seen a huge improvement in our social media engagement since teaming up with them!",
-      rating: 5,
-    },
-    {
-      name: "Daffodils Alleria",
-      role: "Head Store Manager",
-      company: "Daffodils Flower Shop",
-      image: "/flower-shop-logo.png",
-      testimonial:
-        "Tycoon Technology helped us bloom—literally! They built a stunning e-commerce website for our flower and gift shop that feels as elegant as our bouquets. Their product shoots made our arrangements pop with beauty, and their social media management has grown our customer base every single week. From online orders to event bookings, everything runs smoother and looks better thanks to them!",
-      rating: 5,
-    },
-    {
-      name: "Maleeka's Marque",
-      role: "Operational Manager",
-      company: "Maleeka's Event Management",
-      image: "/event-management-logo.jpg",
-      testimonial:
-        "The team at Tycoon Technology transformed our event management business with their comprehensive digital solutions. Their website development and social media strategies have significantly increased our client inquiries and bookings.",
-      rating: 5,
-    },
-    {
-      name: "Asia Restaurant",
-      role: "Owner & Chef",
-      company: "Asia Restaurant",
-      image: "/asian-restaurant-logo.jpg",
-      testimonial:
-        "Exceptional service and outstanding results! Tycoon Technology's video production and digital marketing have helped us showcase our authentic Asian cuisine to a broader audience. Our online presence has never been stronger.",
-      rating: 5,
-    },
-    {
-      name: "Money Heist Restaurant",
-      role: "Business Manager",
-      company: "Money Heist Themed Restaurant",
-      image: "/themed-restaurant-logo.jpg",
-      testimonial:
-        "Tycoon Technology perfectly captured the unique theme and atmosphere of our restaurant through their creative content and marketing strategies. They understand how to make a brand stand out in a competitive market.",
-      rating: 5,
-    },
-  ]
-
+  // Auto-rotate testimonials
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted || testimonials.length === 0) return
+
     const interval = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
     }, 5000)
+
     return () => clearInterval(interval)
   }, [mounted, testimonials.length])
 
-  if (!mounted) return null
+  // Debug: Log current state
+  useEffect(() => {
+    console.log("Current state:", { loading, error, testimonialsCount: testimonials.length, mounted })
+  }, [loading, error, testimonials.length, mounted])
+
+  if (!mounted && loading) {
+    return (
+      <section id="testimonials" className="py-20 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center">
+            <p className="text-muted-foreground">Loading testimonials...</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (error) {
+    return (
+      <section id="testimonials" className="py-20 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center">
+            <p className="text-red-500">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-4 bg-primary text-white px-4 py-2 rounded"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (testimonials.length === 0 && !loading) {
+    return (
+      <section id="testimonials" className="py-20 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center">
+            <p className="text-muted-foreground">No testimonials available yet.</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Check your Firebase console to ensure you have data in the 'testimonials' collection.
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -180,25 +233,10 @@ const TestimonialsSection = () => {
           transition={{ duration: 0.6 }}
         >
           <motion.div
-            className="bg-card/30 backdrop-blur-sm border border-border/50 rounded-3xl p-8 md:p-12 relative overflow-hidden"
+            className="bg-card/30 backdrop-blur-sm border border-border/50 rounded-3xl p-8 relative overflow-hidden"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/2"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/5 rounded-full blur-lg translate-y-1/3 -translate-x-1/3"></div>
-            
-            {/* Quote Icon */}
-            <motion.div
-              className="absolute top-6 left-6 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center"
-              whileHover={{ rotate: 15, scale: 1.1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z" />
-              </svg>
-            </motion.div>
-
             {/* Testimonial Content */}
             <div className="pt-8">
               <AnimatePresence mode="wait">
@@ -210,7 +248,7 @@ const TestimonialsSection = () => {
                   animate="enter"
                   exit="exit"
                 >
-                  "{testimonials[currentTestimonial].testimonial}"
+                  "{testimonials[currentTestimonial]?.quote || "No testimonial text available"}"
                 </motion.p>
               </AnimatePresence>
 
@@ -230,15 +268,24 @@ const TestimonialsSection = () => {
                     transition={{ duration: 0.2 }}
                   >
                     <img
-                      src={testimonials[currentTestimonial].image || "/placeholder.svg"}
-                      alt={testimonials[currentTestimonial].name}
+                      src={testimonials[currentTestimonial]?.logo || "/placeholder.svg"}
+                      alt={testimonials[currentTestimonial]?.clientName || "Client"}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = "/placeholder.svg"
+                      }}
                     />
                   </motion.div>
                   <div>
-                    <div className="font-semibold text-foreground">{testimonials[currentTestimonial].name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonials[currentTestimonial].role}</div>
-                    <div className="text-sm text-primary">{testimonials[currentTestimonial].company}</div>
+                    <div className="font-semibold text-foreground">
+                      {testimonials[currentTestimonial]?.clientName || "Anonymous Client"}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {testimonials[currentTestimonial]?.clientTitle || "Customer"}
+                    </div>
+                    <div className="text-sm text-primary">
+                      {testimonials[currentTestimonial]?.company || "Business"}
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -250,7 +297,7 @@ const TestimonialsSection = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3, duration: 0.4 }}
               >
-                {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                {[...Array(testimonials[currentTestimonial]?.stars || 5)].map((_, i) => (
                   <motion.svg
                     key={i}
                     className="w-5 h-5 text-yellow-400 fill-current"
@@ -298,7 +345,7 @@ const TestimonialsSection = () => {
         >
           {testimonials.map((testimonial, index) => (
             <motion.div
-              key={index}
+              key={testimonial.id}
               className={`p-6 rounded-2xl border transition-all duration-300 cursor-pointer ${
                 index === currentTestimonial
                   ? "bg-primary/10 border-primary/50 scale-105"
@@ -321,17 +368,26 @@ const TestimonialsSection = () => {
                   transition={{ duration: 0.2 }}
                 >
                   <img
-                    src={testimonial.image || "/placeholder.svg"}
-                    alt={testimonial.name}
+                    src={testimonial.logo || "/placeholder.svg"}
+                    alt={testimonial.clientName || "Client"}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = "/placeholder.svg"
+                    }}
                   />
                 </motion.div>
                 <div>
-                  <div className="font-semibold text-sm text-foreground">{testimonial.name}</div>
-                  <div className="text-xs text-muted-foreground">{testimonial.company}</div>
+                  <div className="font-semibold text-sm text-foreground">
+                    {testimonial.clientName || "Anonymous Client"}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {testimonial.company || "Business"}
+                  </div>
                 </div>
               </motion.div>
-              <p className="text-sm text-muted-foreground line-clamp-3">"{testimonial.testimonial}"</p>
+              <p className="text-sm text-muted-foreground line-clamp-3">
+                "{testimonial.quote || "No testimonial text available"}"
+              </p>
             </motion.div>
           ))}
         </motion.div>

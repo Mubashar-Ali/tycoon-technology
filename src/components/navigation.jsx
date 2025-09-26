@@ -25,8 +25,9 @@ const Navigation = () => {
 
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Dento Desk", href: "/dento-desk" },
     { name: "About", href: "/about" },
+    { name: "Dento", href: "/dento-desk" },
+    { name: "POS", href: "/pos" },
     { name: "Contact", href: "/contact" },
   ]
 
@@ -153,7 +154,7 @@ const Navigation = () => {
               </motion.button>
             )}
 
-            
+
           </motion.div>
 
           {/* Mobile Menu Button */}
@@ -221,7 +222,7 @@ const Navigation = () => {
                   </motion.div>
                 ))}
 
-               
+
 
                 {/* Theme Toggle in Mobile Menu */}
                 <motion.div

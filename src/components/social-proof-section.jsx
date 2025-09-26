@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
+import { collection, getDocs, orderBy, query } from "firebase/firestore"
+import { db } from "@/lib/firebase" // Adjust the import path according to your project structure
 
 const SocialProofSection = () => {
   const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const [stats, setStats] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const brands = [
     { name: "Pizza Town", logo: "/pizza-restaurant-logo.png" },
@@ -19,28 +20,35 @@ const SocialProofSection = () => {
     { name: "Money Heist Restaurant", logo: "/themed-restaurant-logo.jpg" },
   ]
 
-  const stats = [
-    {
-      number: "150+",
-      label: "Projects Completed",
-      description: "Successfully delivered across various industries",
-    },
-    {
-      number: "98%",
-      label: "Client Satisfaction",
-      description: "Consistently exceeding client expectations",
-    },
-    {
-      number: "24/7",
-      label: "Support Available",
-      description: "Round-the-clock assistance for our clients",
-    },
-    {
-      number: "5+",
-      label: "Years Experience",
-      description: "Proven track record in digital solutions",
-    },
-  ]
+  // Fetch stats from Firebase Firestore
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true)
+        const statsQuery = query(
+          collection(db, "statistics"),
+          orderBy("order", "asc")
+        )
+        const querySnapshot = await getDocs(statsQuery)
+        
+        const statsData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        
+        setStats(statsData)
+        setError(null)
+      } catch (err) {
+        console.error("Error fetching statistics:", err)
+        setError("Failed to load statistics. Please try again later.")
+      } finally {
+        setLoading(false)
+        setMounted(true)
+      }
+    }
+
+    fetchStats()
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -90,6 +98,19 @@ const SocialProofSection = () => {
   }
 
   if (!mounted) return null
+
+  // Loading state for stats
+  if (loading) {
+    return (
+      <section className="py-20 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center">
+            <p className="text-muted-foreground">Loading statistics...</p>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-20 relative overflow-hidden">
@@ -162,50 +183,59 @@ const SocialProofSection = () => {
         </motion.div>
 
         {/* Statistics Section */}
-        <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          {stats.map((stat, index) => (
-            <motion.div
-              key={index}
-              className="text-center p-8 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-300 group"
-              variants={statVariants}
-              whileHover={{ y: -5, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="space-y-4">
-                <motion.div
-                  className="text-4xl md:text-5xl font-bold text-primary"
-                  initial={{ scale: 0, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    delay: index * 0.1 + 0.3,
-                    duration: 0.6,
-                    type: "spring",
-                    stiffness: 100,
-                  }}
-                  whileHover={{ scale: 1.1 }}
-                >
-                  {stat.number}
-                </motion.div>
-                <motion.div
-                  className="text-lg font-semibold text-foreground"
-                  variants={itemVariants}
-                  whileHover={{ x: 2 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {stat.label}
-                </motion.div>
-                <div className="text-sm text-muted-foreground text-pretty">{stat.description}</div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+        {error ? (
+          <div className="text-center py-8">
+            <p className="text-red-500">{error}</p>
+          </div>
+        ) : stats.length > 0 ? (
+          <motion.div
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+          >
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.id}
+                className="text-center p-8 rounded-2xl bg-card/30 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-300 group"
+                variants={statVariants}
+                whileHover={{ y: -5, scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="space-y-4">
+                  <motion.div
+                    className="text-4xl md:text-5xl font-bold text-primary"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      delay: index * 0.1 + 0.3,
+                      duration: 0.6,
+                      type: "spring",
+                      stiffness: 100,
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    {stat.value}
+                  </motion.div>
+                  <motion.div
+                    className="text-lg font-semibold text-foreground"
+                    variants={itemVariants}
+                    whileHover={{ x: 2 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {stat.description}
+                  </motion.div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-muted-foreground">No statistics available at the moment.</p>
+          </div>
+        )}
 
         {/* Call to Action */}
         <motion.div
