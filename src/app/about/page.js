@@ -21,14 +21,14 @@ export default function AboutPage() {
           collection(db, "teamMembers"),
           orderBy("order", "asc")
         );
-        
+
         const querySnapshot = await getDocs(teamMembersQuery);
-        
-        const teamMembersData = querySnapshot.docs.map(doc => ({
+
+        const teamMembersData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }));
-        
+
         setTeamMembers(teamMembersData);
         setError(null);
       } catch (err) {
@@ -187,8 +187,8 @@ export default function AboutPage() {
           {error && (
             <div className="text-center py-12">
               <p className="text-red-500">{error}</p>
-              <button 
-                onClick={() => window.location.reload()} 
+              <button
+                onClick={() => window.location.reload()}
                 className="mt-4 bg-primary text-white px-4 py-2 rounded"
               >
                 Retry
@@ -229,7 +229,9 @@ export default function AboutPage() {
                 ))
               ) : (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-muted-foreground">No team members available yet.</p>
+                  <p className="text-muted-foreground">
+                    No team members available yet.
+                  </p>
                 </div>
               )}
             </div>

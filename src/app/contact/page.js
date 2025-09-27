@@ -85,7 +85,7 @@ export default function ContactPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-xl text-muted-foreground max-w-3xl mx-auto"
           >
-            Empowering businesses with innovative solutions. Let's connect and
+            Empowering businesses with innovative solutions. Let connect and
             shape the future of technology together.
           </motion.p>
         </div>
