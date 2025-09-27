@@ -93,7 +93,7 @@ export default function POSLandingPage() {
     },
     {
       name: "Lifetime",
-      price: "₨ 150,000",
+      price: "₨ 500,000",
       period: "/one-time",
       features: [
         "All POS features",
@@ -210,20 +210,19 @@ export default function POSLandingPage() {
                     Watch Demo
                   </a>
                 </motion.button>
-
-                <motion.button
-                  className="border border-border text-foreground px-8 py-4 rounded-lg font-medium hover:bg-accent transition-all duration-200"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <a
+                  href="https://pos-tycoon.web.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <a
-                    href="https://pos-tycoon.web.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <motion.button
+                    className="border border-border text-foreground px-8 py-4 rounded-lg font-medium hover:bg-accent transition-all duration-200"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Start Free Trial
-                  </a>
-                </motion.button>
+                  </motion.button>
+                </a>
               </motion.div>
             </motion.div>
 
@@ -490,18 +489,6 @@ export default function POSLandingPage() {
                     </div>
                   ))}
                 </div>
-
-                <motion.button
-                  className={`w-full mt-8 py-3 rounded-lg font-medium transition-all duration-200 ${
-                    plan.popular
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                      : "border border-border text-foreground hover:bg-accent"
-                  }`}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Subscribe Now
-                </motion.button>
               </motion.div>
             ))}
           </motion.div>

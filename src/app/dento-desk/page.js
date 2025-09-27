@@ -3,8 +3,53 @@
 import { motion } from "framer-motion";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
+import { CheckCircle } from "lucide-react";
 
 const DentoDeskPage = () => {
+  const pricingPlans = [
+    {
+      name: "Monthly",
+      price: "₨ 15,000",
+      period: "/month",
+      features: [
+        "Patient appointment scheduling",
+        "Dental treatment records management",
+        "Online patient booking (Web & App)",
+        "Basic reporting and analytics",
+        "24/7 support",
+      ],
+      popular: false,
+    },
+    {
+      name: "Yearly",
+      price: "₨ 160,000",
+      period: "/year",
+      features: [
+        "All Monthly plan features",
+        "Custom treatment plans",
+        "Digital prescriptions",
+        "Priority support",
+        "SMS & Email notifications",
+        "Save 17%",
+      ],
+      popular: true,
+      savings: "Save 17%",
+    },
+    {
+      name: "Lifetime",
+      price: "₨ 1,000,000",
+      period: "/one-time",
+      features: [
+        "All Yearly plan features",
+        "Free lifetime updates",
+        "Unlimited staff & branches",
+        "Custom domain & branding",
+        "Dedicated account manager",
+      ],
+      popular: false,
+    },
+  ];
+
   const features = [
     {
       icon: "📅",
@@ -165,6 +210,11 @@ const DentoDeskPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
               >
+               <a
+                href="https://dento-tycoon.web.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <motion.button
                   className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-200"
                   whileHover={{ scale: 1.05 }}
@@ -172,6 +222,7 @@ const DentoDeskPage = () => {
                 >
                   Start Free Trial
                 </motion.button>
+              </a>
               </motion.div>
             </motion.div>
 
@@ -289,6 +340,108 @@ const DentoDeskPage = () => {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div
+              className="flex items-center justify-center gap-2 mb-4"
+              variants={itemVariants}
+            >
+              <div className="h-1 w-10 bg-primary rounded-full" />
+              <motion.p
+                className="text-primary font-medium text-sm uppercase tracking-wider"
+                variants={itemVariants}
+              >
+                PRICING
+              </motion.p>
+              <div className="h-1 w-10 bg-primary rounded-full" />
+            </motion.div>
+
+            <motion.h2
+              className="text-4xl md:text-6xl font-bold mb-6 text-balance"
+              variants={itemVariants}
+            >
+              Simple, <span className="gradient-text">Transparent</span> Pricing
+            </motion.h2>
+
+            <motion.p
+              className="text-lg text-muted-foreground max-w-2xl mx-auto"
+              variants={itemVariants}
+            >
+              All plans include full features. Choose what works best for your
+              business.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            {pricingPlans.map((plan, index) => (
+              <motion.div
+                key={index}
+                className={`relative rounded-2xl p-8 border transition-all duration-300 ${
+                  plan.popular
+                    ? "border-primary bg-card shadow-xl scale-105"
+                    : "border-border bg-card/50 hover:border-border/80"
+                }`}
+                variants={itemVariants}
+                whileHover={{ y: -5 }}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
+                      Most Popular
+                    </span>
+                  </div>
+                )}
+
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-semibold text-foreground mb-4">
+                    {plan.name}
+                  </h3>
+                  <div className="mb-2">
+                    <span className="text-4xl font-bold text-foreground">
+                      {plan.price}
+                    </span>
+                    <span className="text-muted-foreground">{plan.period}</span>
+                  </div>
+                  {plan.savings && (
+                    <p className="text-primary font-medium text-sm">
+                      {plan.savings}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-4">
+                  {plan.features.map((feature, featureIndex) => (
+                    <div
+                      key={featureIndex}
+                      className="flex items-center space-x-3"
+                    >
+                      <CheckCircle className="h-5 w-5 text-primary" />
+                      <span className="text-sm text-muted-foreground">
+                        {feature}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* Dashboard Preview Section */}
       <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -323,8 +476,7 @@ const DentoDeskPage = () => {
               </div>
               <img
                 // src="/dental-practice-management-software-dashboard-with.jpg"
-                src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGRlbnRhbHxlbnwwfHwwfHx8MA%3D%3D"
-                alt="DentoDesk Dashboard Interface"
+                src="/dento.png"
                 className="w-full h-auto"
               />
             </div>
@@ -356,20 +508,19 @@ const DentoDeskPage = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <motion.button
-                className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <a
+                href="https://dento-tycoon.web.app/"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                Start Free Trial
-              </motion.button>
-              <motion.button
-                className="border border-border text-foreground px-8 py-4 rounded-lg font-semibold hover:bg-muted transition-colors duration-200"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Contact Sales
-              </motion.button>
+                <motion.button
+                  className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-200"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Start Free Trial
+                </motion.button>
+              </a>
             </motion.div>
           </motion.div>
         </div>
