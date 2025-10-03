@@ -30,7 +30,7 @@ export async function POST(request) {
 
     // Create email message
     const msg = {
-      to: "aitool246@gmail.com",
+      to: "sales@tycoon.technology",
       from: "support@tycoon.technology",
       subject: `New Contact Form Submission from ${name}`,
       text: `

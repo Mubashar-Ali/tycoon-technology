@@ -20,7 +20,7 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Tycoon Technology - Innovative Digital Solutions",
+  title: "Tycoon Technology",
   description:
     "Empowering your growth with innovative digital solutions, tailored to meet your business needs. Web development, app development, social media marketing, and more.",
   generator: "Tycoon Technology",
@@ -33,7 +33,8 @@ export const metadata = {
   ],
   authors: [{ name: "Tycoon Technology" }],
   openGraph: {
-    title: "Tycoon Technology - Innovative Digital Solutions",
+    title: "Tycoon Technology",
+    icon: "/favicon.ico",
     description:
       "Empowering your growth with innovative digital solutions, tailored to meet your business needs.",
     type: "website",

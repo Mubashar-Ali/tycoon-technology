@@ -3,6 +3,7 @@
 import React, { useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import Image from "next/image"
 
 const Footer = () => {
   const [email, setEmail] = useState("")
@@ -79,7 +80,13 @@ const Footer = () => {
                     whileHover={{ rotate: 5, scale: 1.1 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <span className="text-primary-foreground font-bold text-xl">T</span>
+                    <Image
+                      src="/tycoon-logo.jpeg"
+                      alt="Tycoon Technologies Logo"
+                      width={40}
+                      height={40}
+                      className="object-cover w-full h-full"
+                    />
                   </motion.div>
                   <span className="text-xl font-bold text-foreground">Tycoon Technology</span>
                 </Link>
@@ -90,7 +97,7 @@ const Footer = () => {
                 transform ideas into powerful digital experiences.
               </motion.p>
 
-              
+
             </motion.div>
           </div>
         </motion.div>

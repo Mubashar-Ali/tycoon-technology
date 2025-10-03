@@ -163,7 +163,7 @@ export default function ContactPage() {
                         Email Us
                       </h3>
                       <p className="text-muted-foreground">
-                        kashif@tycoon.technology
+                        sales@tycoon.technology
                       </p>
                     </div>
                   </div>
@@ -189,9 +189,9 @@ export default function ContactPage() {
                         Call Us
                       </h3>
                       <p className="text-muted-foreground">
-                        Phone: +923060626699
+                        Phone: +923060626699 
                         <br />
-                        Fax: 0623009634
+                        Fax: +92623009634
                       </p>
                     </div>
                   </div>

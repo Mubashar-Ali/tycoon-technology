@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { useTheme } from "next-themes"
+import Image from "next/image"
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -75,11 +76,17 @@ const Navigation = () => {
           >
             <Link href="/" className="flex items-center space-x-2">
               <motion.div
-                className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center"
+                className="w-10 h-10 rounded-lg overflow-hidden"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ duration: 0.2 }}
               >
-                <span className="text-primary-foreground font-bold text-lg">T</span>
+                <Image
+                  src="/tycoon-logo.jpeg"
+                  alt="Tycoon Technologies Logo"
+                  width={40}
+                  height={40}
+                  className="object-cover w-full h-full"
+                />
               </motion.div>
               <span className="text-xl font-bold text-foreground">Tycoon Technologies</span>
             </Link>
