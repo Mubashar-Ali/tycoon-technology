@@ -210,19 +210,19 @@ const DentoDeskPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
               >
-               <a
-                href="https://dento-tycoon.web.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <motion.button
-                  className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-200"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <a
+                  href="https://dento.tycoon.technology"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Start Free Trial
-                </motion.button>
-              </a>
+                  <motion.button
+                    className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors duration-200"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Start Free Trial
+                  </motion.button>
+                </a>
               </motion.div>
             </motion.div>
 
@@ -390,11 +390,10 @@ const DentoDeskPage = () => {
             {pricingPlans.map((plan, index) => (
               <motion.div
                 key={index}
-                className={`relative rounded-2xl p-8 border transition-all duration-300 ${
-                  plan.popular
-                    ? "border-primary bg-card shadow-xl scale-105"
-                    : "border-border bg-card/50 hover:border-border/80"
-                }`}
+                className={`relative rounded-2xl p-8 border transition-all duration-300 ${plan.popular
+                  ? "border-primary bg-card shadow-xl scale-105"
+                  : "border-border bg-card/50 hover:border-border/80"
+                  }`}
                 variants={itemVariants}
                 whileHover={{ y: -5 }}
               >
@@ -509,7 +508,7 @@ const DentoDeskPage = () => {
               viewport={{ once: true }}
             >
               <a
-                href="https://dento-tycoon.web.app/"
+                href="https://dento.tycoon.technology"
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -211,7 +211,7 @@ export default function POSLandingPage() {
                   </a>
                 </motion.button>
                 <a
-                  href="https://pos-tycoon.web.app/"
+                  href="https://pos.tycoon.technology"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -443,11 +443,10 @@ export default function POSLandingPage() {
             {pricingPlans.map((plan, index) => (
               <motion.div
                 key={index}
-                className={`relative rounded-2xl p-8 border transition-all duration-300 ${
-                  plan.popular
+                className={`relative rounded-2xl p-8 border transition-all duration-300 ${plan.popular
                     ? "border-primary bg-card shadow-xl scale-105"
                     : "border-border bg-card/50 hover:border-border/80"
-                }`}
+                  }`}
                 variants={itemVariants}
                 whileHover={{ y: -5 }}
               >

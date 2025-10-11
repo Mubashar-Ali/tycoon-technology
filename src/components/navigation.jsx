@@ -27,7 +27,7 @@ const Navigation = () => {
   const navItems = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
-    { name: "Dento", href: "/dento-desk" },
+    { name: "Dento", href: "/dento-cloud" },
     { name: "POS", href: "/pos" },
     { name: "Contact", href: "/contact" },
   ]
