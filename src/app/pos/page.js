@@ -67,7 +67,7 @@ export default function POSLandingPage() {
   const pricingPlans = [
     {
       name: "Monthly",
-      price: "₨ 6,000",
+      price: "₨ 10,000",
       period: "/month",
       features: [
         "All POS features",
@@ -79,7 +79,7 @@ export default function POSLandingPage() {
     },
     {
       name: "Yearly",
-      price: "₨ 60,000",
+      price: "₨ 100,000",
       period: "/year",
       features: [
         "All POS features",
@@ -444,8 +444,8 @@ export default function POSLandingPage() {
               <motion.div
                 key={index}
                 className={`relative rounded-2xl p-8 border transition-all duration-300 ${plan.popular
-                    ? "border-primary bg-card shadow-xl scale-105"
-                    : "border-border bg-card/50 hover:border-border/80"
+                  ? "border-primary bg-card shadow-xl scale-105"
+                  : "border-border bg-card/50 hover:border-border/80"
                   }`}
                 variants={itemVariants}
                 whileHover={{ y: -5 }}
